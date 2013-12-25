@@ -1,0 +1,90 @@
+@import 'nib'
+
+.select7
+	position relative
+	display inline-block
+	min-width 85px
+	margin 0 -10px
+
+	&__current
+		z-index 1000
+		padding 0 15px
+		border 0 none
+		position relative
+		cursor pointer
+		&:hover
+			.select7
+				&__current-value
+					border-color transparent
+				&__caret
+					border-color #35bfae transparent transparent
+
+	&__current-value
+		display inline-block
+		line-height 16px
+		border-bottom 1px dotted
+		transition border-color .2s ease-in-out
+
+	&__caret
+		display inline-block
+		width 0
+		height 0
+		margin-left 5px
+		margin-top 4px
+		vertical-align middle
+		border-width 4px
+		border-style solid
+		border-color rgb(128,128,128) transparent transparent
+
+	&__drop
+		display none
+		position absolute
+		top 100%
+		left 0
+		z-index 1000
+		float left
+		min-width 100%
+		padding 35px 0 5px
+		margin -30px 0 0
+		list-style none
+		font-size 14px
+		background-color #fff
+		border-width 1px
+		border-style solid
+		border-color #ccc
+		border-radius 3px
+		box-shadow 0 3px 4px rgba(0,0,0,.1)
+		background-clip padding-box
+
+	&__option
+		display block
+		overflow hidden
+		padding 3px 15px
+		clear both
+		text-decoration none
+		font-weight 400
+		line-height 1.428571429
+		color #333
+		background-color #fff
+		white-space nowrap
+		cursor pointer
+		transition background-color .2s ease-in-out
+		&:hover
+			color #262626
+			background-color #f5f5f5
+
+	&_open
+		.select7
+			&__current
+				z-index 1001
+				&:hover
+					.select7
+						&__current-value
+							border-color transparent
+						&__caret
+							border-color transparent transparent #35bfae
+			&__caret
+				margin-top -4px
+				border-color transparent transparent #35bfae
+			&__drop
+				display block
