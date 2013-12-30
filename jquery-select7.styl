@@ -1,13 +1,19 @@
-@import 'nib'
-
+normalColor = #6c7c87
+hoverColor = #e74b3b
 .select7
 	position relative
 	display inline-block
 	min-width 85px
 	margin 0 -10px
-
+	text-align left
+	&_position_right
+		.select7
+			&__drop
+				left auto
+				right 0
+			&__option
+				text-align right
 	&__current
-		z-index 1000
 		padding 0 15px
 		border 0 none
 		position relative
@@ -15,13 +21,13 @@
 		&:hover
 			.select7
 				&__current-value
-					border-color transparent
+					color hoverColor
 				&__caret
-					border-color #35bfae transparent transparent
+					border-color hoverColor transparent transparent
 
 	&__current-value
+		color normalColor
 		display inline-block
-		line-height 16px
 		border-bottom 1px dotted
 		transition border-color .2s ease-in-out
 
@@ -30,22 +36,21 @@
 		width 0
 		height 0
 		margin-left 5px
-		margin-top 4px
 		vertical-align middle
-		border-width 4px
+		border-width 6px 4px 0 4px
 		border-style solid
-		border-color rgb(128,128,128) transparent transparent
+		border-color normalColor transparent transparent
+		transition border-color .1s linear
 
 	&__drop
 		display none
 		position absolute
-		top 100%
+		top -10px
 		left 0
 		z-index 1000
-		float left
 		min-width 100%
 		padding 35px 0 5px
-		margin -30px 0 0
+		margin 0
 		list-style none
 		font-size 14px
 		background-color #fff
@@ -82,9 +87,9 @@
 						&__current-value
 							border-color transparent
 						&__caret
-							border-color transparent transparent #35bfae
+							border-color transparent transparent hoverColor
 			&__caret
-				margin-top -4px
-				border-color transparent transparent #35bfae
+				border-color transparent transparent normalColor
+				border-width 0 4px 6px 4px
 			&__drop
 				display block
