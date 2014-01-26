@@ -1,11 +1,58 @@
-normalColor = #6c7c87
-hoverColor = #e74b3b
+normalColor = #252525
+hoverColor = #25972a
 .select7
 	position relative
-	display inline-block
-	min-width 85px
-	margin 0 -10px
 	text-align left
+	&_dropdown
+		display inline-block
+		margin 0 -10px
+		.select7
+			&__current
+				height auto
+				padding 0 15px
+				border 0 none
+				position relative
+				cursor pointer
+				background-color transparent
+				&:hover
+					.select7
+						&__current-value
+							color hoverColor
+						&__caret
+							border-color hoverColor transparent transparent
+			&__drop
+				z-index 1000
+				top -10px
+				left 0
+				min-width 100%
+				padding 35px 0 5px
+				margin 0
+				border-width 1px
+				border-radius 4px
+				background-clip padding-box
+			&__current-value
+				overflow visible
+				color normalColor
+				display inline-block
+				border-bottom 1px dotted
+				transition border-color .2s ease-in-out
+			&__caret
+				position static
+				margin-top 0
+				border-color normalColor transparent transparent
+			&__option
+				padding 3px 15px
+	&_noopts
+		.select7__caret
+			display none
+		.select7__current
+			cursor default
+			&:hover
+				.select7__current-value
+					// color #6c7c87
+					color inherit
+			&-value
+				border-bottom-color transparent
 	&_position_right
 		.select7
 			&__drop
@@ -13,25 +60,42 @@ hoverColor = #e74b3b
 				right 0
 			&__option
 				text-align right
-	&__current
-		padding 0 15px
-		border 0 none
-		position relative
-		cursor pointer
-		&:hover
-			.select7
-				&__current-value
-					color hoverColor
-				&__caret
-					border-color hoverColor transparent transparent
 
-	&__current-value
-		color normalColor
-		display inline-block
-		border-bottom 1px dotted
-		transition border-color .2s ease-in-out
+	&__current
+		position relative
+		border 1px solid #ccc
+		border-radius 4px
+		background-color #fff
+		height 32px
+		padding 5px 10px
+		&-value
+			overflow ellipsis
+			display block
+
+	&__drop
+		display none
+		position absolute
+		top 100%
+		left 0
+		z-index 1002
+		margin -1px 0 0 0
+		padding 0
+		width 100%
+		list-style none
+		font-size 14px
+		background-color #fff
+		border-width 0 1px 1px
+		border-style solid
+		border-color #ccc
+		border-radius 0 0 4px 4px
+		box-shadow 0 3px 4px rgba(0,0,0,.1)
+		background-clip padding-box
 
 	&__caret
+		position absolute
+		top 50%
+		margin-top -3px
+		right 9px
 		display inline-block
 		width 0
 		height 0
@@ -39,38 +103,18 @@ hoverColor = #e74b3b
 		vertical-align middle
 		border-width 6px 4px 0 4px
 		border-style solid
-		border-color normalColor transparent transparent
+		border-color #959595 transparent transparent
 		transition border-color .1s linear
-
-	&__drop
-		display none
-		position absolute
-		top -10px
-		left 0
-		z-index 1000
-		min-width 100%
-		padding 35px 0 5px
-		margin 0
-		list-style none
-		font-size 14px
-		background-color #fff
-		border-width 1px
-		border-style solid
-		border-color #ccc
-		border-radius 3px
-		box-shadow 0 3px 4px rgba(0,0,0,.1)
-		background-clip padding-box
 
 	&__option
 		display block
 		overflow hidden
-		padding 3px 15px
+		padding 6px 10px 7px
 		clear both
 		text-decoration none
 		font-weight 400
 		line-height 1.428571429
 		color #333
-		background-color #fff
 		white-space nowrap
 		cursor pointer
 		transition background-color .2s ease-in-out
@@ -78,18 +122,31 @@ hoverColor = #e74b3b
 			color #262626
 			background-color #f5f5f5
 
+	&__icon
+		margin-right 5px
+		vertical-align text-top
+
 	&_open
 		.select7
 			&__current
 				z-index 1001
+				border-radius 4px 4px 0 0
+				box-shadow 0 1px 4px rgba(0, 0, 0, 0.1)
 				&:hover
 					.select7
 						&__current-value
 							border-color transparent
-						&__caret
-							border-color transparent transparent hoverColor
 			&__caret
-				border-color transparent transparent normalColor
+				border-color transparent transparent #959595
 				border-width 0 4px 6px 4px
 			&__drop
 				display block
+		&.select7_dropdown
+			.select7
+				&__current
+					box-shadow none
+					&:hover
+						.select7__caret
+							border-color transparent transparent hoverColor
+				&__caret
+					border-color transparent transparent normalColor
