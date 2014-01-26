@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.0.7
+@version 0.1.1
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.0.7 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.1.1 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -13,8 +13,10 @@ plugin = ($) ->
 		s.replace(///^\s*///, '').replace(///\s*$///, '')
 	readOptionsFromSelect = (el) ->
 		(for option in $(el).find("option")
-			title: trim $(option).text()
-			value: $(option).attr("value") or trim $(option).text()
+			data = $(option).data()
+			data.title = trim $(option).text()
+			data.value = $(option).attr("value") or trim $(option).text()
+			data
 		)
 	readSelectedIndexFromSelect = (el) ->
 		selectVal = $(el).val()
@@ -41,8 +43,12 @@ plugin = ($) ->
 		pwnSelect: ->
 			@$el.hide()
 
+			classes = @$el.attr("class").split(" ")
+			classes.splice classes.indexOf("select7"), 1
+			classes.push "select7_noopts" if @options.length < 2
+
 			select7Markup = """
-				<div class="select7">
+				<div class="select7 #{classes}">
 					<div class="select7__current">
 						<span data-role="value" class="select7__current-value" data-value=""></span><span class="select7__caret"></span>
 					</div>
@@ -61,14 +67,18 @@ plugin = ($) ->
 			@selectedIndex = readSelectedIndexFromSelect @el
 			@selected = @options[@selectedIndex]
 			@$select7.find("[data-role='value']").attr("data-value", @selected.value).text @selected.title
+			@$select7.find("[data-role='value'] .select7__icon").remove()
+			@$select7.find("[data-role='value']").prepend """<img class="select7__icon" src="#{@selected.icon}">""" if @selected.icon
 		
 		open: ->
 			return if @opened
+			return if @options.length < 2
 			@$drop = $ """<ul class="select7__drop"></ul>"""
 			for option, i in @options
 				continue if i is @selectedIndex
 				$option = $ """<li class="select7__option" data-i="#{i}"></li>"""
 				$option.text option.title
+				$option.prepend """<img class="select7__icon" src="#{option.icon}">""" if option.icon
 				@$drop.append $option
 			@$drop.on "click", ".select7__option", (e) =>
 				{i} = $(e.target).data()
