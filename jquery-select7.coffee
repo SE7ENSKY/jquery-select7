@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.1.1
+@version 0.1.2
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.1.1 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.1.2 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -81,7 +81,8 @@ plugin = ($) ->
 				$option.prepend """<img class="select7__icon" src="#{option.icon}">""" if option.icon
 				@$drop.append $option
 			@$drop.on "click", ".select7__option", (e) =>
-				{i} = $(e.target).data()
+				$el = if $(e.target).is(".select7__option") then $(e.target) else $(e.target).closest(".select7__option")
+				{i} = $el.data()
 				option = @options[i]
 				@$el.val(option.value).trigger("change")
 				@close()
