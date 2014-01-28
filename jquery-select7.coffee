@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.1.2
+@version 0.2.7
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.1.2 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.2.7 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -12,10 +12,13 @@ plugin = ($) ->
 	trim = (s) ->
 		s.replace(///^\s*///, '').replace(///\s*$///, '')
 	readOptionsFromSelect = (el) ->
+		if placeholderText = $(el).attr "placeholder"
+			$(el).find("option:first").prop("disabled", yes).attr("data-is-placeholder", yes).text placeholderText
 		(for option in $(el).find("option")
 			data = $(option).data()
 			data.title = trim $(option).text()
 			data.value = $(option).attr("value") or trim $(option).text()
+			data.disabled = yes if $(option).attr "disabled"
 			data
 		)
 	readSelectedIndexFromSelect = (el) ->
@@ -66,24 +69,31 @@ plugin = ($) ->
 		updateCurrent: ->
 			@selectedIndex = readSelectedIndexFromSelect @el
 			@selected = @options[@selectedIndex]
-			@$select7.find("[data-role='value']").attr("data-value", @selected.value).text @selected.title
-			@$select7.find("[data-role='value'] .select7__icon").remove()
-			@$select7.find("[data-role='value']").prepend """<img class="select7__icon" src="#{@selected.icon}">""" if @selected.icon
+			$value = @$select7.find("[data-role='value']")
+			$value.attr "data-value", if @selected.isPlaceholder then "" else @selected.value
+			console.log "isPlaceholder", @selected.isPlaceholder
+			$value.toggleClass "select7__placeholder", !!@selected.isPlaceholder
+			$value.text @selected.title
+			$value.find(".select7__icon").remove()
+			$value.prepend """<span class="select7__icon"><img src="#{@selected.icon}"></span>""" if @selected.icon
 		
 		open: ->
 			return if @opened
 			return if @options.length < 2
 			@$drop = $ """<ul class="select7__drop"></ul>"""
 			for option, i in @options
+				continue if option.isPlaceholder
 				continue if i is @selectedIndex
 				$option = $ """<li class="select7__option" data-i="#{i}"></li>"""
 				$option.text option.title
-				$option.prepend """<img class="select7__icon" src="#{option.icon}">""" if option.icon
+				$option.addClass "select7__option_disabled" if option.disabled
+				$option.prepend """<span class="select7__icon"><img src="#{option.icon}"></span>""" if option.icon
 				@$drop.append $option
 			@$drop.on "click", ".select7__option", (e) =>
 				$el = if $(e.target).is(".select7__option") then $(e.target) else $(e.target).closest(".select7__option")
 				{i} = $el.data()
 				option = @options[i]
+				return if option.disabled
 				@$el.val(option.value).trigger("change")
 				@close()
 			@$select7.append @$drop

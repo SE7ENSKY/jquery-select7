@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>jquery-select7 example</title>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+	<style>
+		body { font-family: 'Open Sans', sans-serif; }
+	</style>
+	<link rel="stylesheet" href="jquery-select7.css">
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+</head>
+
+<body>
+	<h1>Select 7 examples</h1>
+
+	<h2>Default select</h2>
+	<select>
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option disabled>Disabled option</option>
+		<option>Option 3</option>
+	</select>
+
+	<h2>Select7</h2>
+	<select class="select7">
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option disabled>Disabled option</option>
+		<option>Option 3</option>
+	</select>
+	<select class="select7 select7_dropdown">
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option disabled>Disabled option</option>
+		<option>Option 3</option>
+	</select>
+
+	<h2>With icons</h2>
+	<select class="select7">
+		<option data-icon="http://www.digitalmag.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png">Google</option>
+		<option data-icon="http://careerfuel.net/wp-content/plugins/wp-rss-multi-importer/images/facebook.png">Facebook</option>
+		<option disabled data-icon="http://lurkmore.so/images/3/38/Vk_small.png">Вконтакте</option>
+	</select>
+	<select class="select7 select7_dropdown">
+		<option data-icon="http://www.digitalmag.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png">Google</option>
+		<option data-icon="http://careerfuel.net/wp-content/plugins/wp-rss-multi-importer/images/facebook.png">Facebook</option>
+		<option disabled data-icon="http://lurkmore.so/images/3/38/Vk_small.png">Вконтакте</option>
+	</select>
+
+	<h2>Placeholder</h2>
+	<select class="select7" placeholder="Select something...">
+		<option><!-- first empty option required for placeholder --></option>
+		<option>Option 1</option>
+		<option>Option 2</option>
+		<option disabled>Disabled option</option>
+		<option>Option 3</option>
+	</select>
+
+	<script src="jquery-select7.js"></script>
+	<script>
+		$(".select7").select7()
+	</script>
+</body>
+</html>
