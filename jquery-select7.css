@@ -141,8 +141,30 @@
   color: #a1a1a1 !important;
 }
 .select7__icon {
+  display: inline-block;
+  height: 16px;
   margin-right: 5px;
   vertical-align: text-top;
+  text-align: center;
+  letter-spacing: 0;
+  font-size: 0;
+}
+.select7__icon:after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 0;
+  vertical-align: middle;
+}
+.select7__icon > img {
+  letter-spacing: normal;
+  font-size: 12px;
+  border: 0 none;
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: 100%;
+  display: inline-block;
+  vertical-align: middle;
 }
 .select7_open .select7__current {
   z-index: 1001;
