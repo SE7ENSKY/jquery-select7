@@ -73,9 +73,11 @@
       }
 
       Select7.prototype.pwnSelect = function() {
-        var classes, select7Markup,
+        var classes, h, select7Markup, v, w,
           _this = this;
-        this.$el.hide();
+        if (!this.config.nativeDropdown) {
+          this.$el.hide();
+        }
         classes = this.$el.attr("class").split(" ");
         classes.splice(classes.indexOf("select7"), 1);
         if (this.options.length < 2) {
@@ -88,10 +90,34 @@
         });
         this.$el.on("change", this.$el.data("updateCurrentFn"));
         this.updateCurrent();
-        this.$select7.find(".select7__current").click(function() {
-          return _this.toggle();
-        });
-        return this.$el.before(this.$select7);
+        if (!this.config.nativeDropdown) {
+          this.$select7.find(".select7__current").click(function() {
+            return _this.toggle();
+          });
+        }
+        this.$el.after(this.$select7);
+        if (this.config.nativeDropdown) {
+          this.$el.css({
+            position: "absolute",
+            transformOrigin: "top left",
+            zIndex: 1,
+            opacity: 0,
+            margin: 0,
+            padding: 0
+          });
+          v = function($el, k) {
+            return parseFloat($el.css(k).replace("px", ""));
+          };
+          w = function($el) {
+            return v($el, "width") + v($el, "padding-left") + v($el, "padding-right") + v($el, "border-left-width") + v($el, "border-right-width");
+          };
+          h = function($el) {
+            return v($el, "height") + v($el, "padding-top") + v($el, "padding-bottom") + v($el, "border-top-width") + v($el, "border-bottom-width");
+          };
+          return this.$el.css({
+            transform: "scaleX(" + (w(this.$select7) / w(this.$el)) + ") scaleY(" + (h(this.$select7) / h(this.$el)) + ")"
+          });
+        }
       };
 
       Select7.prototype.updateCurrent = function() {
@@ -111,21 +137,6 @@
       Select7.prototype.open = function() {
         var $option, i, option, _i, _len, _ref,
           _this = this;
-        if (this.config.nativeDropdown) {
-          this.$el.css({
-            width: 0,
-            height: 0,
-            position: "absolute",
-            marginLeft: "-" + (this.$select7.width()) + "px"
-          }).show();
-          setTimeout(function() {
-            var e;
-            e = document.createEvent('MouseEvents');
-            e.initMouseEvent('mousedown', true, true, window);
-            return _this.el.dispatchEvent(e);
-          }, 1);
-          return;
-        }
         if (this.opened) {
           return;
         }

@@ -3,6 +3,12 @@
   text-align: left;
   display: inline-block;
 }
+.select7_native_dropdown .select7__current {
+  cursor: default !important;
+}
+.select7_native_dropdown .select7__caret {
+  border-color: #252525 transparent transparent !important;
+}
 .select7_dropdown {
   display: inline-block;
   margin: 0 -10px;

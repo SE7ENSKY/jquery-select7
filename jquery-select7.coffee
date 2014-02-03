@@ -45,7 +45,7 @@ plugin = ($) ->
 			@pwnSelect()
 
 		pwnSelect: ->
-			@$el.hide()
+			@$el.hide() unless @config.nativeDropdown
 
 			classes = @$el.attr("class").split(" ")
 			classes.splice classes.indexOf("select7"), 1
@@ -64,9 +64,23 @@ plugin = ($) ->
 			@$el.on "change", @$el.data "updateCurrentFn"
 			@updateCurrent()
 			
-			@$select7.find(".select7__current").click => @toggle()
+			unless @config.nativeDropdown
+				@$select7.find(".select7__current").click => @toggle()
 
-			@$el.before @$select7
+			@$el.after @$select7
+			if @config.nativeDropdown
+				@$el.css
+					position: "absolute"
+					transformOrigin: "top left"
+					zIndex: 1
+					opacity: 0
+					margin: 0
+					padding: 0
+				v = ($el, k) -> parseFloat $el.css(k).replace("px", "")
+				w = ($el) -> v($el, "width") + v($el, "padding-left") + v($el, "padding-right") + v($el, "border-left-width") + v($el, "border-right-width")
+				h = ($el) -> v($el, "height") + v($el, "padding-top") + v($el, "padding-bottom") + v($el, "border-top-width") + v($el, "border-bottom-width")
+				@$el.css
+					transform: "scaleX(#{ w(@$select7) / w(@$el) }) scaleY(#{ h(@$select7) / h(@$el) })"
 		updateCurrent: ->
 			@selectedIndex = readSelectedIndexFromSelect @el
 			@selected = @options[@selectedIndex]
@@ -78,20 +92,6 @@ plugin = ($) ->
 			$value.prepend """<span class="select7__icon"><img src="#{@selected.icon}"></span>""" if @selected.icon
 		
 		open: ->
-			if @config.nativeDropdown
-				@$el
-					.css
-						width: 0
-						height: 0
-						position: "absolute"
-						marginLeft: "-#{@$select7.width()}px"
-					.show()
-				setTimeout =>
-					e = document.createEvent 'MouseEvents'
-					e.initMouseEvent 'mousedown', true, true, window
-					@el.dispatchEvent e
-				, 1
-				return
 			return if @opened
 			return if @options.length < 2
 			@$drop = $ """<ul class="select7__drop"></ul>"""
