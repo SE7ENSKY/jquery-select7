@@ -3,7 +3,10 @@ jquery-select7
 
 Select2-like wheel reinvent. Project status is incubating.
 
+## Example
+[see example](http://se7ensky.github.io/jquery-select7/example.html)
 
+## Unfiltered
 Якщо є html select, наприклад
 select.select7
 	option(value="rating", selected) по рейтингу
