@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.2.7
+@version 0.2.9
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.2.7 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.2.9 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -29,14 +29,15 @@ plugin = ($) ->
 		return 0
 
 	class Select7
-		# defaults:
-		# 	v: 1
+		defaults:
+			nativeDropdown: off
 
 		constructor: (@el, config) ->
 			@$el = $ @el
 			@$select7 = null
 			@$drop = null
-			# @config = $.extend {}, @defaults, config
+			@config = $.extend {}, @defaults, config
+			@config.nativeDropdown = on if @$el.is ".select7_native_dropdown"
 			@options = readOptionsFromSelect @el
 			@selectedIndex = 0
 			@selected = null
@@ -71,13 +72,26 @@ plugin = ($) ->
 			@selected = @options[@selectedIndex]
 			$value = @$select7.find("[data-role='value']")
 			$value.attr "data-value", if @selected.isPlaceholder then "" else @selected.value
-			console.log "isPlaceholder", @selected.isPlaceholder
 			$value.toggleClass "select7__placeholder", !!@selected.isPlaceholder
 			$value.text @selected.title
 			$value.find(".select7__icon").remove()
 			$value.prepend """<span class="select7__icon"><img src="#{@selected.icon}"></span>""" if @selected.icon
 		
 		open: ->
+			if @config.nativeDropdown
+				@$el
+					.css
+						width: 0
+						height: 0
+						position: "absolute"
+						marginLeft: "-#{@$select7.width()}px"
+					.show()
+				setTimeout =>
+					e = document.createEvent 'MouseEvents'
+					e.initMouseEvent 'mousedown', true, true, window
+					@el.dispatchEvent e
+				, 1
+				return
 			return if @opened
 			return if @options.length < 2
 			@$drop = $ """<ul class="select7__drop"></ul>"""
