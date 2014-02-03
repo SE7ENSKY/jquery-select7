@@ -87,7 +87,7 @@ plugin = ($) ->
 						marginLeft: "-#{@$select7.width()}px"
 					.show()
 				setTimeout =>
-					e = document.createEvent 'MouseEvents'
+					e = document.createEvent 'MouseEvent'
 					e.initMouseEvent 'mousedown', true, true, window
 					@el.dispatchEvent e
 				, 1

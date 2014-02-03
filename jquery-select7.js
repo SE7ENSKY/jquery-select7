@@ -120,7 +120,7 @@
           }).show();
           setTimeout(function() {
             var e;
-            e = document.createEvent('MouseEvents');
+            e = document.createEvent('MouseEvent');
             e.initMouseEvent('mousedown', true, true, window);
             return _this.el.dispatchEvent(e);
           }, 1);
