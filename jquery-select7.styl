@@ -1,9 +1,18 @@
-normalColor = #252525
+normalColor = #222
 hoverColor = #25972a
+borderColor = #ccc
+selectHeight = 35px
+borderRadius = 4px
+paddingV = 5px
+paddingH = 10px
+optionFontSize = 14px
+
 .select7
 	position relative
 	text-align left
 	display inline-block
+	line-height 1.428571429
+	// line-height selectHeight - (paddingV * 2)
 	&_native_dropdown
 		.select7__current
 			cursor default !important
@@ -11,11 +20,11 @@ hoverColor = #25972a
 			border-color normalColor transparent transparent !important
 	&_dropdown
 		display inline-block
-		margin 0 -10px
+		margin 0 (paddingH * (-1) + 5)
 		.select7
 			&__current
 				height auto
-				padding 0 15px
+				padding 0 (paddingH + 5) 0 paddingH
 				border 0 none
 				position relative
 				cursor pointer
@@ -28,26 +37,24 @@ hoverColor = #25972a
 							border-color hoverColor transparent transparent
 			&__drop
 				z-index 1000
-				top -10px
+				top 0
 				left 0
 				min-width 100%
-				padding 35px 0 5px
-				margin 0
+				padding selectHeight 0 5px
+				margin-top -6px
 				border-width 1px
-				border-radius 4px
+				border-radius borderRadius
 				background-clip padding-box
 			&__current-value
 				overflow visible
-				color normalColor
 				display inline-block
 				border-bottom 1px dotted
-				transition border-color .2s ease-in-out
 			&__caret
 				position static
 				margin-top 0
 				border-color normalColor transparent transparent
 			&__option
-				padding 3px 15px
+				padding paddingV paddingH
 	&_noopts
 		.select7__caret
 			display none
@@ -55,7 +62,6 @@ hoverColor = #25972a
 			cursor default
 			&:hover
 				.select7__current-value
-					// color #6c7c87
 					color inherit
 			&-value
 				border-bottom-color transparent
@@ -69,11 +75,13 @@ hoverColor = #25972a
 
 	&__current
 		position relative
-		border 1px solid #ccc
-		border-radius 4px
+		color normalColor
+		border 1px solid borderColor
+		border-radius borderRadius
 		background-color #fff
-		padding 5px 22px 5px 10px
+		padding paddingV (paddingH + 12) paddingV paddingH
 		cursor pointer
+		height selectHeight
 		&-value
 			overflow ellipsis
 			display block
@@ -85,21 +93,26 @@ hoverColor = #25972a
 	&__drop
 		display none
 		position absolute
-		top 100%
+		top 0
 		left 0
-		z-index 1002
-		margin -1px 0 0 0
-		padding 0
-		width 100%
-		list-style none
-		font-size 14px
+		z-index 1000
+		min-width 100%
+		padding selectHeight 0 5px
+		margin 0
+		font-size optionFontSize
 		background-color #fff
-		border-width 0 1px 1px
+		border-width 1px
 		border-style solid
-		border-color #ccc
-		border-radius 0 0 4px 4px
+		border-color borderColor
+		border-radius borderRadius
 		box-shadow 0 3px 4px rgba(0,0,0,.1)
 		background-clip padding-box
+	&__drop-list
+		list-style none
+		margin 0
+		padding 0
+		max-height 168px
+		overflow-y auto
 
 	&__caret
 		position absolute
@@ -113,35 +126,34 @@ hoverColor = #25972a
 		vertical-align middle
 		border-width 6px 4px 0 4px
 		border-style solid
-		border-color #959595 transparent transparent
+		border-color normalColor transparent transparent
 		transition border-color .1s linear
 
 	&__option
 		display block
 		overflow hidden
-		padding 6px 10px 7px
+		padding paddingV paddingH
 		clear both
 		text-decoration none
-		font-weight 400
-		line-height 1.428571429
-		color #333
+		font-weight normal
+		color lighten(normalColor, 10%)
 		white-space nowrap
 		cursor pointer
 		transition background-color .2s ease-in-out
 		&_disabled
-			background-color #fefefe !important
-			color #a1a1a1 !important
+			background-color lighten(normalColor, 98%) !important
+			color lighten(normalColor, 60%) !important
 			cursor default !important
 		&:hover
-			color #262626
-			background-color #f5f5f5
+			color normalColor
+			background-color lighten(normalColor, 95%)
 
 	&__placeholder
-		color #a1a1a1 !important
+		color lighten(normalColor, 60%) !important
 
 	&__icon
 		display inline-block
-		height 16px
+		height selectHeight - (paddingV * 2) - 1
 		margin-right 5px
 		vertical-align text-top
 		text-align center
@@ -167,8 +179,9 @@ hoverColor = #25972a
 		.select7
 			&__current
 				z-index 1001
-				border-radius 4px 4px 0 0
-				box-shadow 0 1px 4px rgba(0, 0, 0, 0.1)
+				border-color transparent
+				box-shadow none
+				background-color transparent
 				&:hover
 					.select7
 						&__current-value
@@ -176,7 +189,7 @@ hoverColor = #25972a
 						&__caret
 							border-color transparent transparent hoverColor
 			&__caret
-				border-color transparent transparent #959595
+				border-color transparent transparent normalColor
 				border-width 0 4px 6px 4px
 			&__drop
 				display block

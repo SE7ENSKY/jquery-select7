@@ -2,20 +2,21 @@
   position: relative;
   text-align: left;
   display: inline-block;
+  line-height: 1.428571429;
 }
 .select7_native_dropdown .select7__current {
   cursor: default !important;
 }
 .select7_native_dropdown .select7__caret {
-  border-color: #252525 transparent transparent !important;
+  border-color: #222 transparent transparent !important;
 }
 .select7_dropdown {
   display: inline-block;
-  margin: 0 -10px;
+  margin: 0 -5px;
 }
 .select7_dropdown .select7__current {
   height: auto;
-  padding: 0 15px;
+  padding: 0 15px 0 10px;
   border: 0 none;
   position: relative;
   cursor: pointer;
@@ -29,29 +30,27 @@
 }
 .select7_dropdown .select7__drop {
   z-index: 1000;
-  top: -10px;
+  top: 0;
   left: 0;
   min-width: 100%;
   padding: 35px 0 5px;
-  margin: 0;
+  margin-top: -6px;
   border-width: 1px;
   border-radius: 4px;
   background-clip: padding-box;
 }
 .select7_dropdown .select7__current-value {
   overflow: visible;
-  color: #252525;
   display: inline-block;
   border-bottom: 1px dotted;
-  transition: border-color 0.2s ease-in-out;
 }
 .select7_dropdown .select7__caret {
   position: static;
   margin-top: 0;
-  border-color: #252525 transparent transparent;
+  border-color: #222 transparent transparent;
 }
 .select7_dropdown .select7__option {
-  padding: 3px 15px;
+  padding: 5px 10px;
 }
 .select7_noopts .select7__caret {
   display: none;
@@ -74,11 +73,13 @@
 }
 .select7__current {
   position: relative;
+  color: #222;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #fff;
   padding: 5px 22px 5px 10px;
   cursor: pointer;
+  height: 35px;
 }
 .select7__current-value {
   overflow: ellipsis;
@@ -90,21 +91,27 @@
 .select7__drop {
   display: none;
   position: absolute;
-  top: 100%;
+  top: 0;
   left: 0;
-  z-index: 1002;
-  margin: -1px 0 0 0;
-  padding: 0;
-  width: 100%;
-  list-style: none;
+  z-index: 1000;
+  min-width: 100%;
+  padding: 35px 0 5px;
+  margin: 0;
   font-size: 14px;
   background-color: #fff;
-  border-width: 0 1px 1px;
+  border-width: 1px;
   border-style: solid;
   border-color: #ccc;
-  border-radius: 0 0 4px 4px;
+  border-radius: 4px;
   box-shadow: 0 3px 4px rgba(0,0,0,0.1);
   background-clip: padding-box;
+}
+.select7__drop-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 168px;
+  overflow-y: auto;
 }
 .select7__caret {
   position: absolute;
@@ -118,37 +125,36 @@
   vertical-align: middle;
   border-width: 6px 4px 0 4px;
   border-style: solid;
-  border-color: #959595 transparent transparent;
+  border-color: #222 transparent transparent;
   transition: border-color 0.1s linear;
 }
 .select7__option {
   display: block;
   overflow: hidden;
-  padding: 6px 10px 7px;
+  padding: 5px 10px;
   clear: both;
   text-decoration: none;
-  font-weight: 400;
-  line-height: 1.428571429;
-  color: #333;
+  font-weight: normal;
+  color: #383838;
   white-space: nowrap;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
 .select7__option_disabled {
-  background-color: #fefefe !important;
-  color: #a1a1a1 !important;
+  background-color: #fbfbfb !important;
+  color: #a7a7a7 !important;
   cursor: default !important;
 }
 .select7__option:hover {
-  color: #262626;
-  background-color: #f5f5f5;
+  color: #222;
+  background-color: #f4f4f4;
 }
 .select7__placeholder {
-  color: #a1a1a1 !important;
+  color: #a7a7a7 !important;
 }
 .select7__icon {
   display: inline-block;
-  height: 16px;
+  height: 24px;
   margin-right: 5px;
   vertical-align: text-top;
   text-align: center;
@@ -174,8 +180,9 @@
 }
 .select7_open .select7__current {
   z-index: 1001;
-  border-radius: 4px 4px 0 0;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border-color: transparent;
+  box-shadow: none;
+  background-color: transparent;
 }
 .select7_open .select7__current:hover .select7__current-value {
   border-color: transparent;
@@ -184,7 +191,7 @@
   border-color: transparent transparent #25972a;
 }
 .select7_open .select7__caret {
-  border-color: transparent transparent #959595;
+  border-color: transparent transparent #222;
   border-width: 0 4px 6px 4px;
 }
 .select7_open .select7__drop {
@@ -197,5 +204,5 @@
   border-color: transparent transparent #25972a;
 }
 .select7_open.select7_dropdown .select7__caret {
-  border-color: transparent transparent #252525;
+  border-color: transparent transparent #222;
 }

@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.2.9
+@version 0.2.11
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.2.9 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.2.11 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -52,7 +52,7 @@ plugin = ($) ->
 			classes.push "select7_noopts" if @options.length < 2
 
 			select7Markup = """
-				<div class="select7 #{classes}">
+				<div class="select7 #{classes.join ' '}">
 					<div class="select7__current">
 						<span data-role="value" class="select7__current-value" data-value=""></span><span class="select7__caret"></span>
 					</div>
@@ -95,6 +95,9 @@ plugin = ($) ->
 			return if @opened
 			return if @options.length < 2
 			@$drop = $ """<ul class="select7__drop"></ul>"""
+			@$drop = $ """<div class="select7__drop"></div>"""
+			$dropList = $ """<ul class="select7__drop-list"></ul>"""
+			@$drop.append $dropList
 			for option, i in @options
 				continue if option.isPlaceholder
 				continue if i is @selectedIndex
@@ -102,7 +105,7 @@ plugin = ($) ->
 				$option.text option.title
 				$option.addClass "select7__option_disabled" if option.disabled
 				$option.prepend """<span class="select7__icon"><img src="#{option.icon}"></span>""" if option.icon
-				@$drop.append $option
+				$dropList.append $option
 			@$drop.on "click", ".select7__option", (e) =>
 				$el = if $(e.target).is(".select7__option") then $(e.target) else $(e.target).closest(".select7__option")
 				{i} = $el.data()
@@ -113,15 +116,16 @@ plugin = ($) ->
 			@$select7.append @$drop
 			@$select7.addClass "select7_open"
 			@opened = yes
+			$("body").trigger "select7Opened"
 			setTimeout =>
 				@$drop.click (e) -> e.stopPropagation()
 				@$drop.data "closeFn", => @close()
-				$("body").on "click", @$drop.data "closeFn"
+				$("body").on "click select7Opened", @$drop.data "closeFn"
 			, 1
 		close: ->
 			return unless @opened
 			@$select7.removeClass "select7_open"
-			$("body").off "click", @$drop.data "closeFn"
+			$("body").off "click select7Opened", @$drop.data "closeFn"
 			@$drop.remove()
 			@$drop = null
 			@opened = no
