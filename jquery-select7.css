@@ -112,6 +112,7 @@
   padding: 0;
   max-height: 168px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .select7__caret {
   position: absolute;
