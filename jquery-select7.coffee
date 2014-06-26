@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.2.11
+@version 0.2.12
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.2.11 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.2.12 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -19,6 +19,7 @@ plugin = ($) ->
 			data.title = trim $(option).text()
 			data.value = $(option).attr("value") or trim $(option).text()
 			data.disabled = yes if $(option).attr "disabled"
+			data.class = $(option).attr "class"
 			data
 		)
 	readSelectedIndexFromSelect = (el) ->
@@ -101,7 +102,7 @@ plugin = ($) ->
 			for option, i in @options
 				continue if option.isPlaceholder
 				continue if i is @selectedIndex
-				$option = $ """<li class="select7__option" data-i="#{i}"></li>"""
+				$option = $ """<li class="select7__option #{option.class}" data-i="#{i}"></li>"""
 				$option.text option.title
 				$option.addClass "select7__option_disabled" if option.disabled
 				$option.prepend """<span class="select7__icon"><img src="#{option.icon}"></span>""" if option.icon
