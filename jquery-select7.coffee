@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.2.12
+@version 0.2.13
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.2.12 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 0.2.13 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -102,7 +102,7 @@ plugin = ($) ->
 			for option, i in @options
 				continue if option.isPlaceholder
 				continue if i is @selectedIndex
-				$option = $ """<li class="select7__option #{option.class}" data-i="#{i}"></li>"""
+				$option = $ """<li class="select7__option #{option.class or ""}" data-i="#{i}"></li>"""
 				$option.text option.title
 				$option.addClass "select7__option_disabled" if option.disabled
 				$option.prepend """<span class="select7__icon"><img src="#{option.icon}"></span>""" if option.icon
@@ -112,6 +112,9 @@ plugin = ($) ->
 				{i} = $el.data()
 				option = @options[i]
 				return if option.disabled
+				if option.href
+					window.location.href = option.href
+					return
 				@$el.val(option.value).trigger("change")
 				@close()
 			@$select7.append @$drop
