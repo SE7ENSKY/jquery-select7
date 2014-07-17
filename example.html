@@ -4,10 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>jquery-select7 example</title>
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<style>
-		* { box-sizing: border-box; }
-		body { font-family: 'Open Sans', sans-serif; }
+		body { font-family: 'Helvetica Neue', Helvetica, sans-serif; }
 	</style>
 	<link rel="stylesheet" href="jquery-select7.css">
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -368,6 +366,47 @@
 		<option>Option 1</option>
 		<option>Option 2</option>
 		<option disabled>Disabled option</option>
+		<option>Option 3</option>
+	</select>
+
+	<h2>Remove current</h2>
+	<select class="select7 select7_remove_current">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+	</select>
+
+	<h2>Optgroup</h2>
+	<select class="select7">
+		<option>Option 1</option>
+		<optgroup label="Group One">
+			<option>Option 11</option>
+			<option>Option 12</option>
+		</optgroup>
+		<option>Option 2</option>
+		<optgroup label="Group Two">
+			<option>Option 21</option>
+			<option>Option 23</option>
+			<option>Option 24</option>
+		</optgroup>
+		<option>Option 3</option>
+	</select>
+
+
+	<h2>Optgroup Collapse</h2>
+	<select class="select7 select7_collapse_optgroups">
+		<option>Option 1</option>
+		<optgroup label="Group One">
+			<option>Option 11</option>
+			<option>Option 12</option>
+		</optgroup>
+		<option>Option 2</option>
+		<optgroup label="Group Two">
+			<option>Option 21</option>
+			<option>Option 23</option>
+			<option>Option 24</option>
+		</optgroup>
 		<option>Option 3</option>
 	</select>
 

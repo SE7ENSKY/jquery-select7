@@ -12,7 +12,9 @@ optionFontSize = 14px
 	text-align left
 	display inline-block
 	line-height 1.428571429
-	// line-height selectHeight - (paddingV * 2)
+	&
+	& *
+		box-sizing border-box
 	&_native_dropdown
 		.select7__current
 			cursor default !important
@@ -55,6 +57,7 @@ optionFontSize = 14px
 				border-color normalColor transparent transparent
 			&__option
 				padding paddingV paddingH
+
 	&_noopts
 		.select7__caret
 			display none
@@ -131,6 +134,7 @@ optionFontSize = 14px
 		transition border-color .1s linear
 
 	&__option
+	&__optgroup
 		display block
 		overflow hidden
 		padding paddingV paddingH
@@ -139,8 +143,10 @@ optionFontSize = 14px
 		font-weight normal
 		color lighten(normalColor, 10%)
 		white-space nowrap
+	&__option
 		cursor pointer
 		transition background-color .2s ease-in-out
+		font-weight normal
 		&_disabled
 			background-color lighten(normalColor, 98%) !important
 			color lighten(normalColor, 60%) !important
@@ -148,7 +154,30 @@ optionFontSize = 14px
 		&:hover
 			color normalColor
 			background-color lighten(normalColor, 95%)
-
+		&_current
+			&:before
+				content "✓ " 
+	&__optgroup
+		cursor default
+		font-weight bold
+		&:hover
+			background-color lighten(normalColor, 99%)
+		&_collapse
+			.select7__optgroup
+				&-label
+					&:after
+						content " ↓"
+				&-items
+					display none
+			&_open
+				.select7__optgroup
+					&-label
+						&:after
+							content " ↑" 
+					&-items
+						display block
+	&__optgroup-items
+		padding 0
 	&__placeholder
 		color lighten(normalColor, 60%) !important
 

@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 0.2.13
+@version 1.2.2
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 0.2.13 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 1.2.2 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -11,23 +11,44 @@ plugin = ($) ->
 
 	trim = (s) ->
 		s.replace(///^\s*///, '').replace(///\s*$///, '')
-	readOptionsFromSelect = (el) ->
+	readItemsFromSelect = (el) ->
 		if placeholderText = $(el).attr "placeholder"
 			$(el).find("option:first").prop("disabled", yes).attr("data-is-placeholder", yes).text placeholderText
-		(for option in $(el).find("option")
+		readOption = (option) ->
 			data = $(option).data()
 			data.title = trim $(option).text()
 			data.value = $(option).attr("value") or trim $(option).text()
 			data.disabled = yes if $(option).attr "disabled"
-			data.class = $(option).attr "class"
+			data.class = c if c = $(option).attr "class"
 			data
-		)
-	readSelectedIndexFromSelect = (el) ->
-		selectVal = $(el).val()
-		for option, i in $(el).find("option")
-			optionVal = $(option).attr("value") or trim $(option).text()
-			return i if optionVal is selectVal
-		return 0
+		readOptgroup = (optgroup) ->
+			data = $(optgroup).data()
+			data.isOptgroup = yes
+			data.title = trim $(optgroup).attr "label"
+			data.class = c if c = $(optgroup).attr "class"
+			data.options = readOptionsAndOptgroups optgroup
+			data
+		readOptionsAndOptgroups = (el) ->
+			(for item in $(el).find("> option, > optgroup")
+				if $(item).is "option"
+					readOption item
+				else
+					readOptgroup item
+			)
+		readOptionsAndOptgroups el
+	readSelected = (el, items) ->
+		selectedValue = $(el).val()
+		for item in items
+			if item.isOptgroup
+				for option in item.options
+					if option.value is selectedValue
+						return option
+			else if item.value is selectedValue
+				return item
+		if items.length > 0 and items[0].isPlaceholder
+			return items[0]
+
+		return null
 
 	class Select7
 		defaults:
@@ -39,18 +60,21 @@ plugin = ($) ->
 			@$drop = null
 			@config = $.extend {}, @defaults, config
 			@config.nativeDropdown = on if @$el.is ".select7_native_dropdown"
-			@options = readOptionsFromSelect @el
-			@selectedIndex = 0
-			@selected = null
+			@config.removeCurrent = on if @$el.is ".select7_remove_current"
+			@config.collapseOptgroups = on if @$el.is ".select7_collapse_optgroups"
+			@updateItemsAndSelected()
 			@opened = no
 			@pwnSelect()
+
+		updateItemsAndSelected: ->
+			@items = readItemsFromSelect @el
+			@selected = readSelected @el, @items
 
 		pwnSelect: ->
 			@$el.hide() unless @config.nativeDropdown
 
 			classes = @$el.attr("class").split(" ")
 			classes.splice classes.indexOf("select7"), 1
-			classes.push "select7_noopts" if @options.length < 2
 
 			select7Markup = """
 				<div class="select7 #{classes.join ' '}">
@@ -83,9 +107,10 @@ plugin = ($) ->
 				@$el.css
 					transform: "scaleX(#{ w(@$select7) / w(@$el) }) scaleY(#{ h(@$select7) / h(@$el) })"
 		updateCurrent: ->
-			@selectedIndex = readSelectedIndexFromSelect @el
-			@selected = @options[@selectedIndex]
+			@updateItemsAndSelected()
+			# @$el.toggleClass "select7_noopts" if @optionsCount  # 2b reviewed
 			$value = @$select7.find("[data-role='value']")
+			@selected = { isPlaceholder: yes, title: "-" } if @selected is null
 			$value.attr "data-value", if @selected.isPlaceholder then "" else @selected.value
 			$value.toggleClass "select7__placeholder", !!@selected.isPlaceholder
 			$value.text @selected.title
@@ -94,29 +119,53 @@ plugin = ($) ->
 		
 		open: ->
 			return if @opened
-			return if @options.length < 2
+			@items = readItemsFromSelect @el
+			return if @items.length is 0
 			@$drop = $ """<ul class="select7__drop"></ul>"""
 			@$drop = $ """<div class="select7__drop"></div>"""
 			$dropList = $ """<ul class="select7__drop-list"></ul>"""
 			@$drop.append $dropList
-			for option, i in @options
-				continue if option.isPlaceholder
-				continue if i is @selectedIndex
-				$option = $ """<li class="select7__option #{option.class or ""}" data-i="#{i}"></li>"""
+			generate$option = (option) =>
+				$option = $ """<li class="select7__option #{option.class or ""}"></li>"""
 				$option.text option.title
 				$option.addClass "select7__option_disabled" if option.disabled
+				$option.addClass "select7__option_current" if option is @selected
 				$option.prepend """<span class="select7__icon"><img src="#{option.icon}"></span>""" if option.icon
-				$dropList.append $option
+				$option.data "option", option
+				$option
+			generate$optgroup = (optgroup) =>
+				$optgroup = $ """<li class="select7__optgroup #{optgroup.class or ""}"></li>"""
+				$optgroup.addClass "select7__optgroup_collapse" if @config.collapseOptgroups
+				hasCurrent = no
+				$optgroup.append $("""<span class="select7__optgroup-label"></span>""").text optgroup.title
+				if item.options
+					$ul = $ """<ul class="select7__optgroup-items"></ul>"""
+					for option in item.options
+						hasCurrent = yes if option is @selected
+						continue if @config.removeCurrent and option is @selected
+						$ul.append generate$option option
+					$optgroup.append $ul
+				$optgroup.addClass "select7__optgroup_collapse_open" if @config.collapseOptgroups and hasCurrent
+				$optgroup
+			for item, i in @items
+				continue if item.isPlaceholder
+				continue if @config.removeCurrent and item is @selected
+				$dropList.append if item.isOptgroup
+					generate$optgroup item
+				else
+					generate$option item
 			@$drop.on "click", ".select7__option", (e) =>
-				$el = if $(e.target).is(".select7__option") then $(e.target) else $(e.target).closest(".select7__option")
-				{i} = $el.data()
-				option = @options[i]
+				$el = $(e.currentTarget)
+				option = $el.data "option"
 				return if option.disabled
 				if option.href
 					window.location.href = option.href
 					return
 				@$el.val(option.value).trigger("change")
 				@close()
+			@$drop.on "click", ".select7__optgroup_collapse", (e) =>
+				$optgroup = $(e.currentTarget)
+				$optgroup.toggleClass "select7__optgroup_collapse_open"
 			@$select7.append @$drop
 			@$select7.addClass "select7_open"
 			@opened = yes
