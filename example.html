@@ -410,6 +410,46 @@
 		<option>Option 3</option>
 	</select>
 
+
+	<h2>Templates</h2>
+	<select class="select7 select7_collapse_optgroups" 
+		data-template-option-fn-name="example_select7_template_option"
+		data-template-optgroup-fn-name="example_select7_template_optgroup"
+		data-template-current-fn-name="example_select7_template_current"
+	>
+		<option>Option 1</option>
+		<optgroup label="Group One">
+			<option>Option 11</option>
+			<option>Option 12</option>
+		</optgroup>
+		<option>Option 2</option>
+		<optgroup label="Group Two" data-some-optgroup-text="Group-Additional">
+			<option data-some-option-text="Option-Additional">Option 21</option>
+			<option data-some-current-text="Current-Additional">Option 23</option>
+			<option>Option 24</option>
+		</optgroup>
+		<option>Option 3</option>
+	</select>
+	<script>
+		function example_select7_template_option(option) {
+			r = "<i>" + option.title + "</i>"
+			if (option.someOptionText) r += " <b>" + option.someOptionText + "</b>"
+			return r
+		}
+		function example_select7_template_optgroup(optgroup) {
+			r = "<i>" + optgroup.title + "</i>"
+			if (optgroup.someOptgroupText) r += " <b>" + optgroup.someOptgroupText + "</b>"
+			return r
+		}
+		function example_select7_template_current(option) {
+			r = "<i>" + option.title + "</i>"
+			if (option.someCurrentText) r += " <b>" + option.someCurrentText + "</b>"
+			return r
+		}
+	</script>
+
+
+
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 	<script src="jquery-select7.js"></script>

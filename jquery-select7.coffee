@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 1.2.2
+@version 1.2.3
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 1.2.2 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 1.2.3 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -62,6 +62,16 @@ plugin = ($) ->
 			@config.nativeDropdown = on if @$el.is ".select7_native_dropdown"
 			@config.removeCurrent = on if @$el.is ".select7_remove_current"
 			@config.collapseOptgroups = on if @$el.is ".select7_collapse_optgroups"
+			{templateOptionFnName, templateOptgroupFnName, templateCurrentFnName} = @$el.data()
+			if templateOptionFnName
+				@config.optionTemplate = (option) ->
+					window[templateOptionFnName] option
+			if templateOptgroupFnName
+				@config.optgroupTemplate = (optgroup) ->
+					window[templateOptgroupFnName] optgroup
+			if templateCurrentFnName
+				@config.currentTemplate = (option) ->
+					window[templateCurrentFnName] option
 			@updateItemsAndSelected()
 			@opened = no
 			@pwnSelect()
@@ -113,7 +123,10 @@ plugin = ($) ->
 			@selected = { isPlaceholder: yes, title: "-" } if @selected is null
 			$value.attr "data-value", if @selected.isPlaceholder then "" else @selected.value
 			$value.toggleClass "select7__placeholder", !!@selected.isPlaceholder
-			$value.text @selected.title
+			if @config.currentTemplate
+				$value.html @config.currentTemplate @selected
+			else
+				$value.text @selected.title
 			$value.find(".select7__icon").remove()
 			$value.prepend """<span class="select7__icon"><img src="#{@selected.icon}"></span>""" if @selected.icon
 		
@@ -127,7 +140,10 @@ plugin = ($) ->
 			@$drop.append $dropList
 			generate$option = (option) =>
 				$option = $ """<li class="select7__option #{option.class or ""}"></li>"""
-				$option.text option.title
+				if @config.optionTemplate
+					$option.html @config.optionTemplate option
+				else
+					$option.text option.title
 				$option.addClass "select7__option_disabled" if option.disabled
 				$option.addClass "select7__option_current" if option is @selected
 				$option.prepend """<span class="select7__icon"><img src="#{option.icon}"></span>""" if option.icon
@@ -137,7 +153,12 @@ plugin = ($) ->
 				$optgroup = $ """<li class="select7__optgroup #{optgroup.class or ""}"></li>"""
 				$optgroup.addClass "select7__optgroup_collapse" if @config.collapseOptgroups
 				hasCurrent = no
-				$optgroup.append $("""<span class="select7__optgroup-label"></span>""").text optgroup.title
+				$label = $ """<span class="select7__optgroup-label"></span>"""
+				if @config.optgroupTemplate
+					$label.html @config.optgroupTemplate optgroup
+				else
+					$label.text optgroup.title
+				$optgroup.append $label
 				if item.options
 					$ul = $ """<ul class="select7__optgroup-items"></ul>"""
 					for option in item.options

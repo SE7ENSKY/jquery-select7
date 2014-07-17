@@ -2,12 +2,12 @@
 
 /*
 @name jquery-select7
-@version 1.2.2
+@version 1.2.3
 @author Se7enSky studio <info@se7ensky.com>
 */
 
 
-/*! jquery-select7 1.2.2 http://github.com/Se7enSky/jquery-select7
+/*! jquery-select7 1.2.3 http://github.com/Se7enSky/jquery-select7
 */
 
 
@@ -96,6 +96,7 @@
       };
 
       function Select7(el, config) {
+        var templateCurrentFnName, templateOptgroupFnName, templateOptionFnName, _ref;
         this.el = el;
         this.$el = $(this.el);
         this.$select7 = null;
@@ -109,6 +110,22 @@
         }
         if (this.$el.is(".select7_collapse_optgroups")) {
           this.config.collapseOptgroups = true;
+        }
+        _ref = this.$el.data(), templateOptionFnName = _ref.templateOptionFnName, templateOptgroupFnName = _ref.templateOptgroupFnName, templateCurrentFnName = _ref.templateCurrentFnName;
+        if (templateOptionFnName) {
+          this.config.optionTemplate = function(option) {
+            return window[templateOptionFnName](option);
+          };
+        }
+        if (templateOptgroupFnName) {
+          this.config.optgroupTemplate = function(optgroup) {
+            return window[templateOptgroupFnName](optgroup);
+          };
+        }
+        if (templateCurrentFnName) {
+          this.config.currentTemplate = function(option) {
+            return window[templateCurrentFnName](option);
+          };
         }
         this.updateItemsAndSelected();
         this.opened = false;
@@ -177,7 +194,11 @@
         }
         $value.attr("data-value", this.selected.isPlaceholder ? "" : this.selected.value);
         $value.toggleClass("select7__placeholder", !!this.selected.isPlaceholder);
-        $value.text(this.selected.title);
+        if (this.config.currentTemplate) {
+          $value.html(this.config.currentTemplate(this.selected));
+        } else {
+          $value.text(this.selected.title);
+        }
         $value.find(".select7__icon").remove();
         if (this.selected.icon) {
           return $value.prepend("<span class=\"select7__icon\"><img src=\"" + this.selected.icon + "\"></span>");
@@ -201,7 +222,11 @@
         generate$option = function(option) {
           var $option;
           $option = $("<li class=\"select7__option " + (option["class"] || "") + "\"></li>");
-          $option.text(option.title);
+          if (_this.config.optionTemplate) {
+            $option.html(_this.config.optionTemplate(option));
+          } else {
+            $option.text(option.title);
+          }
           if (option.disabled) {
             $option.addClass("select7__option_disabled");
           }
@@ -215,13 +240,19 @@
           return $option;
         };
         generate$optgroup = function(optgroup) {
-          var $optgroup, $ul, hasCurrent, option, _i, _len, _ref;
+          var $label, $optgroup, $ul, hasCurrent, option, _i, _len, _ref;
           $optgroup = $("<li class=\"select7__optgroup " + (optgroup["class"] || "") + "\"></li>");
           if (_this.config.collapseOptgroups) {
             $optgroup.addClass("select7__optgroup_collapse");
           }
           hasCurrent = false;
-          $optgroup.append($("<span class=\"select7__optgroup-label\"></span>").text(optgroup.title));
+          $label = $("<span class=\"select7__optgroup-label\"></span>");
+          if (_this.config.optgroupTemplate) {
+            $label.html(_this.config.optgroupTemplate(optgroup));
+          } else {
+            $label.text(optgroup.title);
+          }
+          $optgroup.append($label);
           if (item.options) {
             $ul = $("<ul class=\"select7__optgroup-items\"></ul>");
             _ref = item.options;
