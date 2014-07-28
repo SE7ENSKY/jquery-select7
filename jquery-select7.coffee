@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 1.2.3
+@version 1.2.4
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 1.2.3 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 1.2.4 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -127,8 +127,8 @@ plugin = ($) ->
 				$value.html @config.currentTemplate @selected
 			else
 				$value.text @selected.title
-			$value.find(".select7__icon").remove()
-			$value.prepend """<span class="select7__icon"><img src="#{@selected.icon}"></span>""" if @selected.icon
+				$value.find(".select7__icon").remove()
+				$value.prepend """<span class="select7__icon"><img src="#{@selected.icon}"></span>""" if @selected.icon
 		
 		open: ->
 			return if @opened
