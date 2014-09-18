@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 1.2.4
+@version 1.2.5
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 1.2.4 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 1.2.5 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -64,14 +64,14 @@ plugin = ($) ->
 			@config.collapseOptgroups = on if @$el.is ".select7_collapse_optgroups"
 			{templateOptionFnName, templateOptgroupFnName, templateCurrentFnName} = @$el.data()
 			if templateOptionFnName
-				@config.optionTemplate = (option) ->
-					window[templateOptionFnName] option
+				@config.optionTemplate = (args...) ->
+					window[templateOptionFnName].call @, args...
 			if templateOptgroupFnName
-				@config.optgroupTemplate = (optgroup) ->
-					window[templateOptgroupFnName] optgroup
+				@config.optgroupTemplate = (args...) ->
+					window[templateOptgroupFnName].call @, args...
 			if templateCurrentFnName
-				@config.currentTemplate = (option) ->
-					window[templateCurrentFnName] option
+				@config.currentTemplate = (args...) ->
+					window[templateCurrentFnName].call @, args...
 			@updateItemsAndSelected()
 			@opened = no
 			@pwnSelect()
@@ -124,7 +124,7 @@ plugin = ($) ->
 			$value.attr "data-value", if @selected.isPlaceholder then "" else @selected.value
 			$value.toggleClass "select7__placeholder", !!@selected.isPlaceholder
 			if @config.currentTemplate
-				$value.html @config.currentTemplate @selected
+				$value.html @config.currentTemplate.call @, @selected, @items
 			else
 				$value.text @selected.title
 				$value.find(".select7__icon").remove()
@@ -141,7 +141,7 @@ plugin = ($) ->
 			generate$option = (option) =>
 				$option = $ """<li class="select7__option #{option.class or ""}"></li>"""
 				if @config.optionTemplate
-					$option.html @config.optionTemplate option
+					$option.html @config.optionTemplate.call @, option, @items
 				else
 					$option.text option.title
 				$option.addClass "select7__option_disabled" if option.disabled
@@ -155,7 +155,7 @@ plugin = ($) ->
 				hasCurrent = no
 				$label = $ """<span class="select7__optgroup-label"></span>"""
 				if @config.optgroupTemplate
-					$label.html @config.optgroupTemplate optgroup
+					$label.html @config.optgroupTemplate.call @, optgroup, @items
 				else
 					$label.text optgroup.title
 				$optgroup.append $label
