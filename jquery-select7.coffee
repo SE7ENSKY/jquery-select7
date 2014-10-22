@@ -53,6 +53,7 @@ plugin = ($) ->
 	class Select7
 		defaults:
 			nativeDropdown: off
+			readonly: off
 
 		constructor: (@el, config) ->
 			@$el = $ @el
@@ -60,6 +61,7 @@ plugin = ($) ->
 			@$drop = null
 			@config = $.extend {}, @defaults, config
 			@config.nativeDropdown = on if @$el.is ".select7_native_dropdown"
+			@config.readonly = on if @$el.is ".select7_readonly"
 			@config.removeCurrent = on if @$el.is ".select7_remove_current"
 			@config.collapseOptgroups = on if @$el.is ".select7_collapse_optgroups"
 			{templateOptionFnName, templateOptgroupFnName, templateCurrentFnName} = @$el.data()
@@ -176,13 +178,14 @@ plugin = ($) ->
 				else
 					generate$option item
 			@$drop.on "click", ".select7__option", (e) =>
-				$el = $(e.currentTarget)
-				option = $el.data "option"
-				return if option.disabled
-				if option.href
-					window.location.href = option.href
-					return
-				@$el.val(option.value).trigger("change")
+				unless @config.readonly
+					$el = $(e.currentTarget)
+					option = $el.data "option"
+					return if option.disabled
+					if option.href
+						window.location.href = option.href
+						return
+					@$el.val(option.value).trigger("change")
 				@close()
 			@$drop.on "click", ".select7__optgroup_collapse", (e) =>
 				$optgroup = $(e.currentTarget)

@@ -147,6 +147,8 @@ optionFontSize = 14px
 		cursor pointer
 		transition background-color .2s ease-in-out
 		font-weight normal
+		.select7_readonly &
+			transition none
 		&_disabled
 			background-color lighten(normalColor, 98%) !important
 			color lighten(normalColor, 60%) !important
@@ -154,6 +156,9 @@ optionFontSize = 14px
 		&:hover
 			color normalColor
 			background-color lighten(normalColor, 95%)
+			.select7_readonly &
+				color inherit
+				background-color inherit
 		&_current
 			&:before
 				content "✓ " 

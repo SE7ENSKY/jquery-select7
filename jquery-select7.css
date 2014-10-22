@@ -149,6 +149,9 @@
   transition: background-color 0.2s ease-in-out;
   font-weight: normal;
 }
+.select7_readonly .select7__option {
+  transition: none;
+}
 .select7__option_disabled {
   background-color: #fbfbfb !important;
   color: #a7a7a7 !important;
@@ -157,6 +160,10 @@
 .select7__option:hover {
   color: #222;
   background-color: #f4f4f4;
+}
+.select7_readonly .select7__option:hover {
+  color: inherit;
+  background-color: inherit;
 }
 .select7__option_current:before {
   content: "✓ ";
