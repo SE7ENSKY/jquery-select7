@@ -1,6 +1,6 @@
 ###
 @name jquery-select7
-@version 1.2.5
+@version 1.2.6
 @author Se7enSky studio <info@se7ensky.com>
 ###
 ###! jquery-select7 1.2.5 http://github.com/Se7enSky/jquery-select7 ###
@@ -18,7 +18,7 @@ plugin = ($) ->
 			data = $(option).data()
 			data.title = trim $(option).text()
 			data.value = $(option).attr("value") or trim $(option).text()
-			data.disabled = yes if $(option).attr "disabled"
+			data.disabled = if $(option).attr "disabled" then yes else no
 			data.class = c if c = $(option).attr "class"
 			data
 		readOptgroup = (optgroup) ->
