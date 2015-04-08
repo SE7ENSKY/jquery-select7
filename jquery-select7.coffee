@@ -1,9 +1,9 @@
 ###
 @name jquery-select7
-@version 1.2.6
+@version 1.2.7
 @author Se7enSky studio <info@se7ensky.com>
 ###
-###! jquery-select7 1.2.5 http://github.com/Se7enSky/jquery-select7 ###
+###! jquery-select7 1.2.7 http://github.com/Se7enSky/jquery-select7 ###
 
 plugin = ($) ->
 	
@@ -64,6 +64,7 @@ plugin = ($) ->
 			@config.readonly = on if @$el.is ".select7_readonly"
 			@config.removeCurrent = on if @$el.is ".select7_remove_current"
 			@config.collapseOptgroups = on if @$el.is ".select7_collapse_optgroups"
+			@config.sortActive = on if @$el.is ".select7_sort_active"
 			{templateOptionFnName, templateOptgroupFnName, templateCurrentFnName} = @$el.data()
 			if templateOptionFnName
 				@config.optionTemplate = (args...) ->
@@ -170,6 +171,16 @@ plugin = ($) ->
 					$optgroup.append $ul
 				$optgroup.addClass "select7__optgroup_collapse_open" if @config.collapseOptgroups and hasCurrent
 				$optgroup
+			if @config.sortActive
+				activeArray = []
+				disableArray = []
+				for item, i in @items
+					if item.disabled && !(item.isPlaceholder)
+						disableArray.push(item)
+					else
+						activeArray.push(item)
+				@items = activeArray.concat(disableArray)
+				
 			for item, i in @items
 				continue if item.isPlaceholder
 				continue if @config.removeCurrent and item is @selected
